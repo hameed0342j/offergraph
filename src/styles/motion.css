@@ -1,0 +1,188 @@
+/*
+  Intro motion, after the reference load-in: things arrive by blur-to-sharp and fade,
+  never by sliding. Every animated element sets --d (delay). All of these are CSS
+  animations, so ?t=<seconds> can pause and seek them for repeatable stills.
+*/
+
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(var(--b, 0.9rem));
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes resolve {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+    filter: blur(0.8rem);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0.25rem);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: var(--len, 400);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes map-reveal {
+  0% {
+    filter: blur(2.8rem) brightness(1.05) saturate(0.95);
+  }
+  48% {
+    filter: blur(2.4rem) brightness(1.02) saturate(0.97);
+  }
+  76% {
+    filter: blur(0.35rem) brightness(1) saturate(1);
+  }
+  100% {
+    filter: blur(0) brightness(1) saturate(1);
+  }
+}
+
+@keyframes map-settle {
+  from {
+    transform: scale(1.035);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes lime-on {
+  from {
+    fill: rgba(255, 255, 255, 0.12);
+    stroke: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.a-blur {
+  animation: blur-in var(--dur, 620ms) var(--ease) var(--d, 0ms) both;
+}
+
+.a-fade {
+  animation: fade-in var(--dur, 500ms) var(--ease-soft) var(--d, 0ms) both;
+}
+
+.a-grow-y {
+  transform-origin: 50% 100%;
+  animation: grow-y var(--dur, 520ms) var(--ease) var(--d, 0ms) both;
+}
+
+.a-grow-x {
+  transform-origin: 0 50%;
+  animation: grow-x var(--dur, 700ms) var(--ease) var(--d, 0ms) both;
+}
+
+.a-scale {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: scale-in var(--dur, 640ms) var(--ease) var(--d, 0ms) both;
+}
+
+.a-resolve {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: resolve var(--dur, 700ms) var(--ease) var(--d, 0ms) both;
+}
+
+.a-fade-out {
+  animation: fade-out var(--dur, 520ms) var(--ease-soft) var(--d, 0ms) both;
+}
+
+.a-draw {
+  animation: draw var(--dur, 900ms) var(--ease-soft) var(--d, 0ms) both;
+}
+
+/* once a page has finished its intro, moved or re-rendered elements must not replay it */
+html.settled .a-blur,
+html.settled .a-fade,
+html.settled .a-grow-y,
+html.settled .a-grow-x,
+html.settled .a-scale,
+html.settled .a-resolve,
+html.settled .a-fade-out,
+html.settled .a-draw,
+html.settled .city-img {
+  animation: none !important;
+}
+html.settled .cl .cover {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a-blur,
+  .a-fade,
+  .a-grow-y,
+  .a-grow-x,
+  .a-scale,
+  .a-resolve,
+  .a-fade-out,
+  .a-draw {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+  }
+}

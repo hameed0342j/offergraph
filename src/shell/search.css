@@ -1,0 +1,242 @@
+.search {
+  position: fixed;
+  top: 4.85rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(44rem, calc(100vw - 56rem));
+  height: 3.4rem;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 0.35rem 0 1.1rem;
+  border-radius: 99rem;
+  background: rgba(6, 9, 7, 0.88);
+  border: 1px solid rgba(222, 255, 71, 0.22);
+  -webkit-backdrop-filter: blur(1.6rem);
+  backdrop-filter: blur(1.6rem);
+  box-shadow:
+    0 1.2rem 3rem -1.2rem rgba(0, 0, 0, 0.85),
+    0 0 0 0.35rem rgba(222, 255, 71, 0.04);
+}
+.search:focus-within {
+  border-color: rgba(222, 255, 71, 0.55);
+}
+.search-icon {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: var(--lime);
+  flex: none;
+}
+.search input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  outline: none;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+.search input::placeholder {
+  color: var(--text-3);
+}
+.search-go {
+  width: 2.7rem;
+  height: 2.7rem;
+  border-radius: 50%;
+  background: var(--lime);
+  color: var(--lime-ink);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.search-go svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.search-go:disabled {
+  opacity: 0.7;
+}
+
+/* follow-up dialog */
+.clarify-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(0.4rem);
+  backdrop-filter: blur(0.4rem);
+  animation: fade-in 220ms var(--ease) both;
+}
+.clarify {
+  width: min(52rem, 100%);
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  padding: 1.6rem 1.8rem;
+  background: rgba(4, 8, 5, 0.96);
+  animation: blur-in 360ms var(--ease) both;
+  --b: 0.6rem;
+}
+.clarify-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.clarify-src {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.9rem;
+  color: var(--lime);
+}
+.clarify-src svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.clarify h2 {
+  margin: 0.5rem 0 0;
+  font-size: 1.9rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.clarify-q {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-2);
+  line-height: 1.45;
+}
+.clarify-known {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1.1rem;
+  font-size: 0.92rem;
+  color: var(--text-3);
+}
+.clarify-known .chip {
+  height: 2.1rem;
+}
+.clarify-list {
+  margin-top: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+.cq-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+.cq-label em {
+  font-style: normal;
+  font-size: 0.86rem;
+  color: var(--text-3);
+  font-weight: 400;
+}
+.cq-opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+.opt {
+  height: 2.8rem;
+  padding: 0 1.05rem;
+  border-radius: 99rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.98rem;
+  color: var(--text);
+  transition:
+    background 180ms var(--ease),
+    border-color 180ms var(--ease),
+    color 180ms var(--ease);
+}
+.opt:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.opt.on {
+  background: var(--lime);
+  color: var(--lime-ink);
+  border-color: var(--lime);
+  font-weight: 600;
+}
+.opt-input {
+  height: 2.8rem;
+  min-width: 12rem;
+  padding: 0 1rem;
+  border-radius: 99rem;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  background: transparent;
+  font-size: 0.98rem;
+  outline: none;
+  color-scheme: dark;
+}
+.opt-input:focus {
+  border-color: rgba(222, 255, 71, 0.6);
+  border-style: solid;
+}
+.clarify-foot,
+.clarify-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.6rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.clarify-actions {
+  justify-content: flex-end;
+}
+.clarify-note {
+  font-size: 0.9rem;
+  color: var(--text-3);
+}
+.clarify-notlive p {
+  margin: 1.3rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+.clarify-notlive b {
+  color: var(--text);
+}
+.pill-btn.ghost {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  height: 2.7rem;
+}
+
+/* personalisation chips in the header */
+.personal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+.personal .chip {
+  height: 2rem;
+  font-size: 0.88rem;
+  background: var(--lime-soft);
+  color: var(--lime);
+  font-weight: 500;
+}
+
+@media (max-width: 899px) {
+  .search {
+    position: static;
+    transform: none;
+    width: auto;
+    margin: 1.2rem 1.6rem 0;
+  }
+  .clarify {
+    padding: 1.3rem;
+  }
+}

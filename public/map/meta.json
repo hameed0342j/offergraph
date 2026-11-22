@@ -1,0 +1,10 @@
+{
+  "lon0": 20.0,
+  "lon1": 135.0,
+  "lat0": 55.0,
+  "lat1": -25.0,
+  "width": 3680,
+  "height": 2943,
+  "pxPerDeg": 32.0,
+  "credit": "NASA Blue Marble and Black Marble (public domain), via Wikimedia Commons"
+}

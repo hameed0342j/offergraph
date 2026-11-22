@@ -1,0 +1,513 @@
+/* Live page: real supplier inventory (Viator) for destinations outside the Singapore demo graph. */
+.live {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: radial-gradient(120rem 60rem at 70% -10%, rgba(222, 255, 71, 0.045), transparent 60%), var(--bg);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+}
+.live-hero {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(4rem) saturate(1.1) brightness(0.55);
+  opacity: 0.22;
+  transform: scale(1.15);
+  pointer-events: none;
+}
+
+.live-side {
+  position: fixed;
+  left: 1.8rem;
+  top: 10.2rem;
+  width: 25rem;
+  max-height: calc(100vh - 12rem);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  z-index: 3;
+  scrollbar-width: none;
+}
+.live-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lime);
+  font-weight: 600;
+}
+.live-kicker svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.live-title {
+  margin: -0.4rem 0 0;
+  font-size: 3rem;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.live-sub {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: -0.7rem;
+  color: var(--text-2);
+  font-size: 1.25rem;
+  text-transform: capitalize;
+}
+.live-sub svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: var(--text-3);
+}
+.live-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+.live-stats > div {
+  background: var(--tile);
+  border: 1px solid var(--tile-border);
+  border-radius: var(--r-tile);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.live-stats b {
+  font-size: 2.3rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.live-stats span {
+  font-size: 1.1rem;
+  color: var(--text-2);
+}
+.live-fresh {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.15rem;
+  color: var(--text-2);
+}
+.live-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 0.3rem var(--lime-soft);
+  flex: none;
+  animation: live-pulse 2.4s var(--ease-soft) infinite;
+}
+@keyframes live-pulse {
+  50% {
+    box-shadow: 0 0 0 0.55rem rgba(222, 255, 71, 0);
+  }
+}
+.live-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.live-label {
+  font-size: 1.05rem;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.live-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.live-muted {
+  color: var(--text-3);
+  font-size: 1.2rem;
+}
+.live-filters {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 1.25rem;
+  color: var(--text-2);
+}
+.live-filters li::before {
+  content: '';
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.7rem;
+  border-radius: 50%;
+  background: var(--lime);
+  vertical-align: 0.15rem;
+}
+.live-edit {
+  align-self: flex-start;
+}
+.live-edit svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.live-note {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+.live-note svg {
+  display: inline-block;
+  width: 1.15rem;
+  height: 1.15rem;
+  vertical-align: -0.2rem;
+}
+.live-note .ok {
+  color: var(--lime);
+}
+
+.live-main {
+  position: relative;
+  margin-left: 29rem;
+  margin-right: 2rem;
+  padding: 10.2rem 0 4rem;
+  z-index: 2;
+}
+.live-banner {
+  margin-bottom: 1.2rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--r-tile);
+  background: rgba(245, 196, 81, 0.08);
+  border: 1px solid rgba(245, 196, 81, 0.25);
+  color: #f3dfa9;
+  font-size: 1.25rem;
+}
+.live-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
+  gap: 1.4rem;
+}
+
+.lcard {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r-panel);
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(1.8rem);
+  backdrop-filter: blur(1.8rem);
+  transition: border-color 0.25s var(--ease), transform 0.35s var(--ease);
+}
+.lcard:hover {
+  border-color: rgba(222, 255, 71, 0.28);
+  transform: translateY(-0.2rem);
+}
+.lcard.skeleton {
+  min-height: 30rem;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0.025) 30%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.025) 70%) 0 0 / 300% 100%, var(--panel);
+  animation: live-shimmer 1.6s linear infinite;
+}
+@keyframes live-shimmer {
+  to {
+    background-position: -150% 0, 0 0;
+  }
+}
+.lcard-img {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+.lcard-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s var(--ease);
+}
+.lcard:hover .lcard-img img {
+  transform: scale(1.04);
+}
+.lcard-rank {
+  position: absolute;
+  left: 0.9rem;
+  top: 0.9rem;
+  min-width: 2.4rem;
+  height: 2.4rem;
+  padding: 0 0.6rem;
+  border-radius: 99rem;
+  display: grid;
+  place-items: center;
+  background: var(--lime);
+  color: var(--lime-ink);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.lcard-tag {
+  position: absolute;
+  right: 0.9rem;
+  top: 0.9rem;
+  height: 2.2rem;
+  padding: 0 0.8rem;
+  border-radius: 99rem;
+  display: grid;
+  place-items: center;
+  background: rgba(4, 5, 4, 0.75);
+  color: var(--text-2);
+  font-size: 1.05rem;
+}
+.lcard-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.1rem 1.2rem 1.2rem;
+  flex: 1;
+}
+.lcard h3 {
+  margin: 0;
+  font-size: 1.45rem;
+  line-height: 1.3;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lcard h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+.lcard h3 a:hover {
+  color: var(--lime);
+}
+.lcard-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 1.15rem;
+  color: var(--text-2);
+}
+.lcard-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.lcard-meta svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--text-3);
+}
+.lcard-meta .star {
+  color: var(--lime);
+  fill: var(--lime);
+}
+.lcard-meta .lcard-op {
+  color: var(--text-3);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lcard-meta em {
+  font-style: normal;
+  color: var(--text-3);
+}
+.lcard-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.lchk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 2.1rem;
+  padding: 0 0.7rem;
+  border-radius: 99rem;
+  font-size: 1.05rem;
+  border: 1px solid var(--line);
+  color: var(--text-2);
+  cursor: default;
+}
+.lchk svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.lchk.pass {
+  background: var(--lime-soft);
+  border-color: rgba(222, 255, 71, 0.3);
+  color: var(--lime);
+}
+.lchk.fail {
+  background: var(--red-soft);
+  border-color: rgba(255, 122, 107, 0.3);
+  color: var(--red);
+}
+.lchk.unknown {
+  border-style: dashed;
+}
+.lchk.pref {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+.lcard-foot {
+  margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.4rem;
+}
+.lcard-price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.lcard-price b {
+  font-size: 1.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.lcard-price span {
+  font-size: 1.1rem;
+  color: var(--text-2);
+}
+.lcard-price s {
+  margin-left: 0.5rem;
+  color: var(--text-3);
+}
+.lcard-price em {
+  font-style: normal;
+  font-size: 1.1rem;
+  color: var(--text-3);
+}
+.lcard-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 2.8rem;
+  padding: 0 1rem;
+  border-radius: 99rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text);
+  font-size: 1.15rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.lcard-go svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.lcard-go:hover {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: var(--lime-ink);
+}
+
+.live-empty {
+  max-width: 60rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 2.2rem;
+}
+.live-empty h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+.live-empty p {
+  margin: 0;
+  color: var(--text-2);
+  font-size: 1.35rem;
+  line-height: 1.5;
+}
+.live-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+.live-picks .pill-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+}
+
+.live-excluded {
+  margin-top: 2.4rem;
+}
+.live-excluded h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.live-excluded ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.live-excluded li {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.2rem;
+}
+.lx-title {
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lx-why {
+  color: var(--red);
+  white-space: nowrap;
+}
+
+@media (max-width: 899px) {
+  /* the search bar sits in normal flow on small screens: lift it above the live page */
+  .search {
+    position: relative;
+    left: auto;
+    z-index: 6;
+  }
+  .live-side {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    max-height: none;
+    margin: 10.8rem 1.6rem 0;
+  }
+  .live-main {
+    margin: 0 1.6rem;
+    padding: 1.6rem 0 9rem;
+  }
+  .live-grid {
+    grid-template-columns: 1fr;
+  }
+  .live-excluded li {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}

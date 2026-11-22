@@ -1,0 +1,17 @@
+.region {
+  z-index: 1;
+}
+.net .p-ranked .thumb {
+  background: rgba(255, 255, 255, 0.05);
+}
+.net .thumb.st-live {
+  background: var(--lime-soft);
+}
+.net .thumb.st-live svg {
+  color: var(--lime);
+}
+.tb-note {
+  padding: 0 1.3rem;
+  color: var(--text-3);
+  font-size: 0.95rem;
+}

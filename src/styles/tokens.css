@@ -1,0 +1,43 @@
+/* Design tokens. 1rem = 10 design px at the 1277x667 reference frame. */
+:root {
+  --bg: #040504;
+  --panel: rgba(1, 5, 3, 0.9);
+  --panel-border: rgba(255, 255, 255, 0.075);
+  --panel-hi: rgba(255, 255, 255, 0.02);
+  --tile: rgba(200, 228, 200, 0.06);
+  --tile-hover: rgba(255, 255, 255, 0.06);
+  --tile-border: rgba(220, 240, 220, 0.07);
+  --line: rgba(255, 255, 255, 0.07);
+
+  --text: #f3f4f1;
+  --text-2: #a9aca6;
+  --text-3: #71746f;
+  --text-4: #4c4f4a;
+
+  --track: rgba(255, 255, 255, 0.085);
+  --bar: #a3a5a1;
+  --bar-dim: rgba(255, 255, 255, 0.16);
+
+  --lime: #deff47;
+  --lime-2: #c9ea36;
+  --lime-ink: #11160a;
+  --lime-soft: rgba(222, 255, 71, 0.13);
+  --lime-fill: rgba(206, 236, 64, 0.34);
+  --lime-line: rgba(222, 255, 71, 0.85);
+
+  --red: #ff7a6b;
+  --red-soft: rgba(255, 122, 107, 0.12);
+  --amber: #f5c451;
+
+  --r-panel: 1.4rem;
+  --r-tile: 1rem;
+  --r-chip: 99rem;
+  --r-pill: 0.45rem;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+
+  --font: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  color-scheme: dark;
+}
