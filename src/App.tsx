@@ -12,6 +12,7 @@ import { HotelsView } from './views/Hotels'
 import { BenchmarkView } from './views/Benchmark'
 import { NetworkView } from './views/Network'
 import { LiveView } from './views/Live'
+import { AGENT_MODE, ChatPanel } from './views/Chat'
 import { Placeholder } from './views/Placeholder'
 
 function Screens() {
@@ -30,6 +31,7 @@ function Screens() {
       <TopNav page={page} />
       {(page === 'offers' || page === 'hotels' || page === 'live') && <SearchBar />}
       <ClarifyDialog />
+      {(page === 'live' || AGENT_MODE) && <ChatPanel />}
       {page === 'live' ? (
         <LiveView />
       ) : page === 'offers' ? (

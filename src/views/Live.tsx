@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { shareOffer } from './Chat'
 import { ArrowRight, ArrowUpRight, Check, CircleHelp, Clock, MapPin, Pencil, Radio, Star, X } from 'lucide-react'
 import { fmtDuration, rankLive, type LiveRanked } from '../engine/liveRank'
 import { personalChips } from '../engine/travelIntent'
@@ -88,6 +89,9 @@ function Card({ x, i, party }: { x: LiveRanked; i: number; party: number }) {
               <span>Price on request</span>
             </div>
           )}
+          <button className="lcard-ask" onClick={() => shareOffer({ title: p.title, priceINR: p.priceINR, url: p.url, image: p.image })}>
+            Ask agent
+          </button>
           {p.url && (
             <a className="lcard-go" href={p.url} target="_blank" rel="noopener noreferrer sponsored">
               View on Viator
