@@ -12,11 +12,11 @@ ul{margin:3pt 0 3pt 16pt;padding:0}li{margin:1pt 0}
 </style></head><body>
 <h1>OfferGraph</h1>
 <p class="sub">Multi-supplier offer intelligence for travel, with a real-time traveller ↔ travel-agent chat built on the Nexconn Chat SDK.<br>
-Live app: <b>https://offergraph-ecru.vercel.app/#/live</b> · Agent desk: <b>https://offergraph-ecru.vercel.app/?agent#/live</b><br>
+Live app: <b>https://offergraph-ecru.vercel.app/#/live</b> · Agent desk: <b>https://offergraph-ecru.vercel.app/?agent#/live</b> · Agent inbox (Chat UI): <b>https://offergraph-ecru.vercel.app/?inbox</b><br>
 Source: <b>https://github.com/hameed0342j/offergraph</b></p>
 
 <div class="key"><b>Nexconn App Key (Production, Singapore data center):</b> <code>8brlm7uf89nz3</code><br>
-Package used: <code>@nexconn/chat</code> (Chat SDK, with <code>@nexconn/engine</code>) v26.5.1</div>
+Packages used: <code>@nexconn/chat</code> + <code>@nexconn/engine</code> (Chat SDK, v26.5.1), <code>@nexconn/chatui</code> (Chat UI, v26.5.0), <code>@nexconn/call</code> (Call SDK, v26.2.1)</div>
 
 <h2>1. Why we built it</h2>
 <p>Travel inventory comes from many suppliers at once. The same tour or hotel appears several times under different names, prices and inclusions, and two listings that look alike can differ in things that matter: hotel pickup, skip-the-line access, meals, cancellation. Travellers end up comparing near-duplicates on their own. Travel agents want to help, but the advice usually happens on a separate phone call or WhatsApp thread, away from the listings being discussed.</p>
@@ -41,12 +41,15 @@ Package used: <code>@nexconn/chat</code> (Chat SDK, with <code>@nexconn/engine</
 <tr><td>Real-time message receipt</td><td><code>NCEngine.addMessageHandler(new MessageHandler({onMessageReceived}))</code></td><td>Both traveller and agent views</td></tr>
 <tr><td>Message history</td><td><code>BaseChannel.createMessagesQuery({channelIdentifier, pageSize: 30}).loadNextPage()</code></td><td>Loaded when a conversation opens</td></tr>
 <tr><td>Typing indicators (both ways)</td><td><code>DirectChannel.sendTypingStatus()</code> + <code>ChannelHandler.onTypingStatusChanged</code></td><td>"Agent is typing…" / "Traveller is typing…"</td></tr>
+<tr><td><b>Call SDK:</b> 1:1 video calls between traveller and agent</td><td><code>NCCallEngine.install()</code>, <code>NCCallEngine.initialize()</code>, <code>startCall({calleeIds, callType: SINGLE, mediaType: AUDIO_VIDEO})</code>, <code>acceptCall</code>, <code>endCall</code>, <code>setLocalVideoView</code> / <code>setRemoteVideoView</code>, <code>setCallEventHandler</code> (onCallReceived / onCallConnected / onCallEnded)</td><td><code>src/lib/call.ts</code>; "Video call" button and Accept / Decline / End bar in the chat panel (<code>src/views/Chat.tsx</code>)</td></tr>
+<tr><td><b>Chat UI:</b> drop-in agent inbox listing every traveller conversation</td><td><code>NCChatUIApplication.initialize({hooks, language})</code>, <code>app.ready()</code>, <code>&lt;nc-chat-ui-app-provider&gt;</code>; user profiles supplied through <code>reqUserProfiles</code></td><td><code>src/views/Inbox.tsx</code>, opened with <code>?inbox</code></td></tr>
 </table>
 
 <h3>User flow</h3>
 <ul>
 <li><b>Traveller:</b> opens Live India, searches a destination, presses <i>Ask a travel agent</i> or <i>Ask agent</i> on any listing. The SDK loads lazily (only when the chat opens) and connects with a token for a per-browser user id. Past messages load, and the shared offer card is sent.</li>
-<li><b>Agent desk:</b> open the site with <code>?agent</code>. It connects as the shared <code>og-agent</code> user, switches to whichever traveller wrote most recently, loads that history, and replies. Both sides see live typing status.</li>
+<li><b>Agent desk:</b> open the site with <code>?agent</code>. It connects as the shared <code>og-agent</code> user, switches to whichever traveller wrote most recently, loads that history, and replies. Both sides see live typing status. Either side can press <i>Video call</i>, and the other side gets Accept / Decline.</li>
+<li><b>Agent inbox (Chat UI):</b> open <code>https://offergraph-ecru.vercel.app/?inbox</code>. It connects as the agent desk and shows all traveller conversations in Nexconn's ready-made Chat UI.</li>
 </ul>
 
 <h2>4. Architecture</h2>
@@ -63,7 +66,7 @@ Package used: <code>@nexconn/chat</code> (Chat SDK, with <code>@nexconn/engine</
 <ul>
 <li>The App Secret exists only in Vercel environment variables. The browser receives just the public App Key and a token scoped to one user id.</li>
 <li>Token issuance is rate-limited per caller (30 per hour) in Redis.</li>
-<li>Scope: we use the Chat SDK only. We do not use Chat UI components or the Call SDK (no voice or video calls). The chat interface is our own React component built on the Chat SDK.</li>
+<li>Scope: the traveller chat panel is our own React component built on the Chat SDK. The agent inbox uses Nexconn Chat UI components. Video calls use the Call SDK in the browser (camera and microphone permission required).</li>
 <li>The agent desk is one shared agent identity. Routing across multiple agents is future work.</li>
 </ul>
 <p><b>Team:</b> Zenithly · Built for the Nexconn Build Challenge, extending our VoyageHack 4.0 OfferGraph prototype.</p>
