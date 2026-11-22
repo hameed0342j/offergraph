@@ -32,9 +32,11 @@ export interface ChatMsg {
 export interface ChatEvents {
   onMessages(m: ChatMsg[], peer: string): void
   onTyping(peer: string): void
+  call?: import('./call').CallEvents
 }
 export interface ChatSession {
   me: string
+  callReady: boolean
   agentId: string
   history(peer: string): Promise<ChatMsg[]>
   send(peer: string, text: string, offer?: SharedOffer): Promise<ChatMsg | null>
@@ -70,10 +72,21 @@ async function open(role: 'traveller' | 'agent', ev: ChatEvents): Promise<ChatSe
   const t = (await res.json()) as { configured?: boolean; appKey?: string; token?: string; agentId?: string; error?: string }
   if (!t.configured || !t.appKey || !t.token) throw new Error(t.error ?? 'Chat is not configured')
 
+  const call = await import('./call').catch(() => null)
+  call?.installCall()
   NCEngine.initialize({ appKey: t.appKey, areaCode: AreaCode.SG, logLevel: LogLevel.ERROR })
   const conn = await NCEngine.connect({ token: t.token })
   if (!conn.isOk || !conn.data) throw new Error(`Could not connect to Nexconn (${conn.code})`)
   const me = conn.data.userId
+  let callReady = false
+  try {
+    if (call && ev.call) {
+      call.initCall(ev.call)
+      callReady = true
+    }
+  } catch (e) {
+    console.warn('Nexconn call init failed', e)
+  }
 
   const toMsg = (m: Message): ChatMsg => {
     const c = m.content as { text?: string; extra?: string }
@@ -107,6 +120,7 @@ async function open(role: 'traveller' | 'agent', ev: ChatEvents): Promise<ChatSe
   let lastTyping = 0
   return {
     me,
+    callReady,
     agentId: t.agentId ?? 'og-agent',
     async history(peer) {
       const q = BaseChannel.createMessagesQuery({ channelIdentifier: new DirectChannelIdentifier(peer), isAscending: false, pageSize: 30 })

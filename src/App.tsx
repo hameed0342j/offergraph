@@ -13,6 +13,7 @@ import { BenchmarkView } from './views/Benchmark'
 import { NetworkView } from './views/Network'
 import { LiveView } from './views/Live'
 import { AGENT_MODE, ChatPanel } from './views/Chat'
+import { AgentInbox, INBOX_MODE } from './views/Inbox'
 import { Placeholder } from './views/Placeholder'
 
 function Screens() {
@@ -55,6 +56,7 @@ function Screens() {
 }
 
 export default function App() {
+  if (INBOX_MODE) return <AgentInbox />
   return (
     <StoreProvider>
       <Screens />

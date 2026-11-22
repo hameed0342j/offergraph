@@ -25,6 +25,36 @@ export function ChatPanel() {
   const pending = useRef<SharedOffer | null>(null)
   const list = useRef<HTMLDivElement>(null)
   const typingTimer = useRef<number | undefined>(undefined)
+  const [call, setCall] = useState<'idle' | 'calling' | 'incoming' | 'active'>('idle')
+  const [callErr, setCallErr] = useState('')
+  const callId = useRef<string | undefined>(undefined)
+  const localV = useRef<HTMLVideoElement>(null)
+  const remoteV = useRef<HTMLVideoElement>(null)
+
+  const startCall = async () => {
+    const p = peerRef.current
+    if (!p || !localV.current || !remoteV.current) return
+    setCallErr('')
+    setCall('calling')
+    try {
+      const { startVideoCall } = await import('../lib/call')
+      callId.current = await startVideoCall(p, localV.current, remoteV.current)
+    } catch (e) {
+      setCallErr(e instanceof Error ? e.message : 'Call failed')
+      setCall('idle')
+    }
+  }
+  const acceptCall = async () => {
+    if (!callId.current || !localV.current || !remoteV.current) return
+    const { acceptVideoCall } = await import('../lib/call')
+    await acceptVideoCall(callId.current, peerRef.current ?? '', localV.current, remoteV.current).catch(() => setCall('idle'))
+  }
+  const hangUp = async () => {
+    const { endVideoCall } = await import('../lib/call')
+    await endVideoCall(callId.current).catch(() => undefined)
+    callId.current = undefined
+    setCall('idle')
+  }
 
   const add = useCallback((m: ChatMsg[]) => setMsgs((prev) => [...prev, ...m.filter((x) => !prev.some((p) => p.id === x.id))].sort((a, b) => a.time - b.time)), [])
 
@@ -59,6 +89,20 @@ export function ChatPanel() {
           setTyping(true)
           clearTimeout(typingTimer.current)
           typingTimer.current = window.setTimeout(() => setTyping(false), 4000)
+        },
+        call: {
+          onIncoming(id, from) {
+            callId.current = id
+            if (AGENT_MODE && from && peerRef.current !== from) void switchPeer(from)
+            setCall('incoming')
+          },
+          onConnected() {
+            setCall('active')
+          },
+          onEnded() {
+            callId.current = undefined
+            setCall('idle')
+          },
         },
       })
       session.current = s
@@ -111,12 +155,29 @@ export function ChatPanel() {
           <b>{who}</b>
         </div>
         <span className={`chat-state ${status}`}>{status === 'ready' ? 'Connected' : status === 'connecting' ? 'Connecting' : status === 'error' ? 'Offline' : ''}</span>
+        {status === 'ready' && peer && call === 'idle' && (
+          <button className="chat-call" onClick={() => void startCall()} title="Start a video call (Nexconn Call SDK)">
+            Video call
+          </button>
+        )}
         {!AGENT_MODE && (
           <button className="chat-x" onClick={() => setOpen(false)} aria-label="Close chat">
             ×
           </button>
         )}
       </header>
+      <div className={`chat-video ${call === 'idle' ? 'hidden' : ''}`}>
+        <video ref={remoteV} autoPlay playsInline className="chat-remote" />
+        <video ref={localV} autoPlay playsInline muted className="chat-local" />
+        <div className="chat-video-bar">
+          <span>{call === 'calling' ? 'Calling…' : call === 'incoming' ? 'Incoming video call' : 'On call'}</span>
+          {call === 'incoming' && <button onClick={() => void acceptCall()}>Accept</button>}
+          <button className="end" onClick={() => void hangUp()}>
+            {call === 'incoming' ? 'Decline' : 'End'}
+          </button>
+        </div>
+      </div>
+      {callErr && <p className="chat-note">{callErr}</p>}
       <div className="chat-list" ref={list}>
         {status === 'error' && <p className="chat-note">{error}</p>}
         {status === 'ready' && !msgs.length && (
