@@ -43,7 +43,10 @@ export async function startVideoCall(peer: string, local: HTMLVideoElement, remo
   if (!engine) throw new Error('Calls are not ready')
   views(peer, local, remote)
   const r = await engine.startCall({ calleeIds: [peer], callType: NCCallType.SINGLE, mediaType: NCCallMediaType.AUDIO_VIDEO })
-  if (!r?.callId) throw new Error(`Call failed (${r?.code})`)
+  if (!r?.callId) {
+    if (r?.code === 80006) throw new Error('VoIP / Call service is not enabled on this Nexconn App Key yet (80006)')
+    throw new Error(`Call failed (${r?.code})`)
+  }
   return r.callId as string
 }
 

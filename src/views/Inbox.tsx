@@ -20,13 +20,18 @@ export function AgentInbox() {
         NCEngine.initialize({ appKey: t.appKey, areaCode: AreaCode.SG })
         const app = NCChatUIApplication.initialize({
           hooks: {
-            reqUserProfiles: async (ids: string[]) => ids.map((id) => ({ id, name: id === 'og-agent' ? 'OfferGraph agent desk' : `Traveller ${id.slice(2, 6)}`, portraitUri: '' })),
+            reqUserProfiles: async (ids: string[]) =>
+              ids.map((userId) => ({
+                userId,
+                name: userId === 'og-agent' ? 'OfferGraph agent desk' : `Traveller ${userId.slice(2, 6)}`,
+                avatarUrl: '',
+              })),
             reqGroupProfiles: async () => [],
             reqSystemProfiles: async () => [],
             reqGroupMembers: async () => [],
           },
           language: 'en_US',
-        } as never)
+        })
         if (!app) throw new Error('Chat UI failed to start')
         app.ready()
         const r = await NCEngine.connect({ token: t.token })
@@ -44,9 +49,9 @@ export function AgentInbox() {
   }, [])
 
   return (
-    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#fff' }}>
-      <header style={{ padding: '10px 16px', borderBottom: '1px solid #e3e6ee', font: '600 14px Inter, sans-serif' }}>
-        OfferGraph agent inbox · Nexconn Chat UI {state && <span style={{ fontWeight: 400, color: '#777' }}>· {state}</span>}
+    <main style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#fff', color: '#14171f' }}>
+      <header style={{ padding: '12px 18px', borderBottom: '1px solid #e3e6ee', font: '600 14px Inter, sans-serif', color: '#14171f', background: '#f8f9fc' }}>
+        OfferGraph agent inbox · Nexconn Chat UI {state && <span style={{ fontWeight: 400, color: '#5b6475' }}>· {state}</span>}
       </header>
       <div ref={host} style={{ flex: 1, minHeight: 0 }} />
     </main>
